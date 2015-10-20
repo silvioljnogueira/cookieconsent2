@@ -42,7 +42,14 @@
     .cc_logo:active {
         opacity:1;
     }
+
+    &.cc_container--hide {
+        //--fade out
+        opacity:0;
+    }
 }
+
+
 
 @media screen and (min-width: $screen-xs-min) {
     .cc_container {

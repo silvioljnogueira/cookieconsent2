@@ -327,10 +327,15 @@
     },
 
     dismiss: function (evt) {
+      var self = this;
       evt.preventDefault && evt.preventDefault();
       evt.returnValue = false;
       this.setDismissedCookie();
-      this.container.removeChild(this.element);
+      this.element.firstChild.className += " cc_container--hide";
+      setTimeout(function () {
+        self.container.removeChild(self.element);
+      }, 1000)
+
     },
 
     setDismissedCookie: function () {
