@@ -45,6 +45,10 @@
     isObject: function (obj) {
       return Object.prototype.toString.call(obj) == '[object Object]';
     },
+    
+    isFunction: function (obj) {
+      return Object.prototype.toString.call(obj) == '[object Function]';
+    },
 
     each: function (arr, callback, /* optional: */context, force) {
       if (Util.isObject(arr) && !force) {
@@ -240,6 +244,7 @@
       domain: null, // default to current domain.
       path: '/', 
       expiryDays: 365,
+      displayTimeout:10000,//
       markup: [
         '<div class="cc_banner-wrapper {{containerClasses}}">',
         '<div class="cc_banner cc_container cc_container--open">',
@@ -254,6 +259,8 @@
       ],
       ondismiss: null
     },
+    
+    autoRejectTimeout: null,
 
     init: function () {
       var options = window[OPTIONS_VARIABLE];
@@ -329,14 +336,26 @@
       } else {
         this.container.insertBefore(this.element, this.container.firstChild);
       }
+      
+      if(this.options.displayTimeout)
+        this.setAutoReject();
     },
+    
+    //Auto-Reject after 10 seconds
+    setAutoReject: function(){
+      this.autoRejectTimeout = setTimeout(function(){this.container.removeChild(this.element);}, this.options.displayTimeout);
+    }
 
     dismiss: function (evt) {
       evt.preventDefault && evt.preventDefault();
       evt.returnValue = false;
+      
+      clearTimeout(this.autoRejectTimeout);
+      
       this.setDismissedCookie();
       this.container.removeChild(this.element);
-      if(Object.prototype.toString.call(this.options.ondismiss) == '[object Function]')
+
+      if(Util.isFunction(this.options.ondismiss))
         this.options.ondismiss();
     },
 
@@ -347,6 +366,9 @@
     reject: function (evt) {
       evt.preventDefault && evt.preventDefault();
       evt.returnValue = false;
+      
+      clearTimeout(this.autoRejectTimeout);
+      
       this.container.removeChild(this.element);
     },
   };
