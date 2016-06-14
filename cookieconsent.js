@@ -235,7 +235,7 @@
     options: {
       message: 'This website uses cookies to ensure you get the best experience on our website. ',
       dismiss: 'Got it!',
-      reject: 'I dont want to be tracked!!',
+      reject: 'Nahh!!',
       learnMore: 'More info',
       link: null,
       target: '_self',
