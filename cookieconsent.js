@@ -343,7 +343,8 @@
     
     //Auto-Reject after 10 seconds
     setAutoReject: function(){
-      this.autoRejectTimeout = setTimeout(function(){this.container.removeChild(this.element);}, this.options.displayTimeout);
+      var master = this;
+      this.autoRejectTimeout = setTimeout(function(){master.container.removeChild(master.element);}, this.options.displayTimeout);
     },
 
     dismiss: function (evt) {
