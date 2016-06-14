@@ -231,6 +231,7 @@
     options: {
       message: 'This website uses cookies to ensure you get the best experience on our website. ',
       dismiss: 'Got it!',
+      reject: 'I dont want to be tracked!!',
       learnMore: 'More info',
       link: null,
       target: '_self',
@@ -242,6 +243,7 @@
       markup: [
         '<div class="cc_banner-wrapper {{containerClasses}}">',
         '<div class="cc_banner cc_container cc_container--open">',
+        '<a data-cc-if="options.reject" href="#null" data-cc-event="click:reject" target="_blank" class="cc_btn cc_btn_accept_all">{{options.reject}}</a>',
         '<a href="#null" data-cc-event="click:dismiss" target="_blank" class="cc_btn cc_btn_accept_all">{{options.dismiss}}</a>',
 
         '<p class="cc_message">{{options.message}} <a data-cc-if="options.link" target="{{ options.target }}" class="cc_more_info" href="{{options.link || "#null"}}">{{options.learnMore}}</a></p>',
@@ -249,7 +251,8 @@
         '<a class="cc_logo" target="_blank" href="http://silktide.com/cookieconsent">Cookie Consent plugin for the EU cookie law</a>',
         '</div>',
         '</div>'
-      ]
+      ],
+      ondismiss: null
     },
 
     init: function () {
@@ -333,11 +336,19 @@
       evt.returnValue = false;
       this.setDismissedCookie();
       this.container.removeChild(this.element);
+      if(Object.prototype.toString.call(this.options.ondismiss) == '[object Function]')
+        this.options.ondismiss();
     },
 
     setDismissedCookie: function () {
       Util.setCookie(DISMISSED_COOKIE, 'yes', this.options.expiryDays, this.options.domain, this.options.path);
-    }
+    },
+    
+    reject: function (evt) {
+      evt.preventDefault && evt.preventDefault();
+      evt.returnValue = false;
+      this.container.removeChild(this.element);
+    },
   };
 
   var init;
